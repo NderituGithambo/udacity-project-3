@@ -1,0 +1,20 @@
+# Use NodeJS base image
+FROM node:12-buster as BUILD
+
+RUN apt-get update && apt-get install zip
+
+# Create app directory
+WORKDIR /usr/src/app
+
+# Install app dependencies by copying
+# package.json and package-lock.json
+COPY ./www/package*.json .
+
+# Install dependencies
+RUN npm install
+
+# Copy app source
+COPY ./www .
+
+# Build (transpile typescript)
+ENTRYPOINT ["node", "server.js"]
